@@ -43,7 +43,7 @@ install -m 0644 "$ARTIFACT" "$STAGE/bin/mockmodem.jar"
 
 (
   cd "$STAGE"
-  "$SEVEN_ZIP_BIN" a -tzip -mx=6 -mtc=off -mta=off "$TEMP_PACKAGE" . >/dev/null
+  "$SEVEN_ZIP_BIN" a -tzip -mx=6 "$TEMP_PACKAGE" . >/dev/null
 )
 mv -f "$TEMP_PACKAGE" "$PACKAGE"
 rmdir "$TEMP_DIR"
