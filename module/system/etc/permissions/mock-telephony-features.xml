@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Capability facade for the state-only Mock Telephony test module. -->
+<permissions>
+    <feature name="android.hardware.telephony" />
+    <feature name="android.software.telecom" />
+    <feature name="android.hardware.telephony.radio.access" />
+    <feature name="android.hardware.telephony.subscription" />
+    <feature name="android.hardware.telephony.gsm" />
+    <feature name="android.hardware.telephony.calling" />
+    <feature name="android.hardware.telephony.data" />
+    <feature name="android.hardware.telephony.messaging" />
+</permissions>

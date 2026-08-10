@@ -1,0 +1,13 @@
+# Mock Telephony module properties.
+# Loaded by ksud via resetprop before zygote.
+
+# NOTE: ro.radio.noril is deliberately NOT set here. It must be set by
+# the shared bootstrap transaction only after injections are known-good, so the
+# failure path can restore the device's original value. Setting it here would
+# overwrite the value before save_original_properties can capture the true
+# original, making the rollback a no-op.
+
+# Bootstrap network preference: LTE/GSM/WCDMA (NETWORK_MODE_LTE_GSM_WCDMA = 9),
+# matching the CTS mock's LTE-first default. Loaded by ksud via resetprop before
+# zygote, so the phone stack comes up in this mode on modem-less devices.
+ro.telephony.default_network=9

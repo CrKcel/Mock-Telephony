@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Sets ANDROID_HOME/ANDROID_SDK_ROOT and exposes sdkmanager on PATH.
+      - name: Set up Android SDK command-line tools
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK build-tools 34 + platform 34
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "platforms;android-34" "build-tools;34.0.0" >/dev/null
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            p7zip-full \
+            libxml2-utils \
+            bubblewrap \
+            ripgrep \
+            unzip
+
+      - name: Build, test, and package
+        run: ./tools/release.sh

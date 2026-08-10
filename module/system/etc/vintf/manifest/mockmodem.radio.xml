@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  VINTF fragment declaring the AIDL radio HAL interfaces implemented by
+  android.telephony.mockmodem.MockModemService.
+
+  Only interfaces the mock actually implements are declared.  IMS is
+  deliberately absent: declaring it without a service would make RIL block
+  forever waiting for it.
+
+  type must be "framework" because this fragment lives in the framework
+  manifest directory (/system/etc/vintf/manifest).  servicemanager checks
+  both framework and device manifests when answering isDeclared().
+-->
+<manifest version="1.0" type="framework">
+    <hal format="aidl">
+        <name>android.hardware.radio.config</name>
+        <version>1</version>
+        <fqname>IRadioConfig/default</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.modem</name>
+        <version>1</version>
+        <fqname>IRadioModem/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.sim</name>
+        <version>1</version>
+        <fqname>IRadioSim/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.network</name>
+        <version>1</version>
+        <fqname>IRadioNetwork/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.data</name>
+        <version>1</version>
+        <fqname>IRadioData/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.messaging</name>
+        <version>1</version>
+        <fqname>IRadioMessaging/slot1</fqname>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.radio.voice</name>
+        <version>1</version>
+        <fqname>IRadioVoice/slot1</fqname>
+    </hal>
+</manifest>
