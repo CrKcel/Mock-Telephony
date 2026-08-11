@@ -87,8 +87,8 @@ public class MockModemService {
     private int mRadioInterfaceCount = STANDALONE_RADIO_INTERFACE_COUNT;
     /**
      * Standalone initialization for the root app_process daemon.  There is
-     * no Android application context; SIM profiles are read from disk and
-     * the modem/phone counts are fixed at one.
+     * no Android application context; the modem/phone counts are fixed at one
+     * and the SIM slot is the static present mock SIM .
      */
     public void init() {
         initInternal(null);
@@ -320,15 +320,11 @@ public class MockModemService {
         return rspInfo;
     }
 
-    public boolean initialize(int simprofile) {
-        Log.d(TAG, "initialize simprofile = " + simprofile);
+    public boolean initialize() {
+        Log.d(TAG, "initialize");
 
-        for (int i = 0; i < mNumOfPhone; i++) {
-            if (!sMockModemConfigInterfaces[i].loadSimProfile(simprofile, TAG)) {
-                Log.e(TAG, "Failed to load SIM profile " + simprofile + " for phone " + i);
-                return false;
-            }
-        }
+        sMockModemConfigInterfaces[0].setRadioState(
+                MockModemConfigInterface.RADIO_STATE_ON, TAG);
 
         mInitialized = true;
         publishCurrentState();

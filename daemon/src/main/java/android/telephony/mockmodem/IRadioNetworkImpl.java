@@ -306,8 +306,8 @@ public class IRadioNetworkImpl extends IRadioNetwork.Stub {
             dataRegResponse.cellIdentity = mServiceState.getPrimaryCellIdentity();
         }
 
-        // No access-technology-specific info: the fixed no-service bootstrap
-        // never camps on a real access technology, so the field stays uninitialized.
+        // No access-technology-specific info: the static mock bootstrap reports
+        // only a serving RAT, so the field stays uninitialized.
         dataRegResponse.accessTechnologySpecificInfo =
                 android.hardware.radio.network.AccessTechnologySpecificInfo.noinit(true);
 
@@ -444,8 +444,8 @@ public class IRadioNetworkImpl extends IRadioNetwork.Stub {
             voiceRegResponse.cellIdentity = mServiceState.getPrimaryCellIdentity();
         }
 
-        // No access-technology-specific info: the fixed no-service bootstrap
-        // never camps on a real access technology, so the field stays uninitialized.
+        // No access-technology-specific info: the static mock bootstrap reports
+        // only a serving RAT, so the field stays uninitialized.
         voiceRegResponse.accessTechnologySpecificInfo =
                 android.hardware.radio.network.AccessTechnologySpecificInfo.noinit(true);
 

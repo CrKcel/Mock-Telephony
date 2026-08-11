@@ -2,7 +2,7 @@
 
 ## Environment
 
-Requires JDK 11+, Android SDK build-tools 34+, Android SDK platform 34+, 7-Zip, `xmllint`, `unzip`, `sha1sum`, and `bwrap`.
+Requires JDK 11+, Android SDK platform & build-tools 34+, 7-Zip, `xmllint`, `unzip`, `sha1sum`, and `bwrap`.
 
 ## Build
 
@@ -41,8 +41,8 @@ adb reboot
 
 ## Device Regression
 
-The default check is read-only: it checks the phone, the static bootstrap's SIM `ABSENT`, the 7 HALs,
-registration state, and data not connected.
+The default check is read-only: it checks the phone, the static bootstrap's SIM `READY`, the 7 HALs,
+voice/data registration IN_SERVICE, and data not connected.
 
 ```bash
 ./tools/adb-smoke.sh

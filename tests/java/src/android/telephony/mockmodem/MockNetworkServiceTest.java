@@ -11,6 +11,7 @@ public final class MockNetworkServiceTest {
         updateHighestRegisteredRatReportsChange();
         noServiceReportsNoCells();
         inServiceConfigReportsRegistration();
+        simPlmnCampsHome();
         TestRunner.done();
     }
 
@@ -74,5 +75,25 @@ public final class MockNetworkServiceTest {
                 "in-service: registration RAT is LTE",
                 svc.getRegistrationRat() == RadioTechnology.LTE);
         TestRunner.check("in-service: home camping", svc.getIsHomeCamping());
+    }
+
+    private static void simPlmnCampsHome() {
+        MockNetworkService svc = new MockNetworkService();
+        svc.updateSimPlmn("44020");
+        TestRunner.check("sim plmn: in service", svc.isInService());
+        TestRunner.check("sim plmn: home camping", svc.getIsHomeCamping());
+        TestRunner.check("sim plmn: not roaming", !svc.getIsRoamingCamping());
+        TestRunner.check(
+                "sim plmn: CS registration is REG_HOME",
+                svc.getRegistration(Domain.CS) == RegState.REG_HOME);
+        TestRunner.check(
+                "sim plmn: PS registration is REG_HOME",
+                svc.getRegistration(Domain.PS) == RegState.REG_HOME);
+        TestRunner.check(
+                "sim plmn: operator numeric is 44020",
+                "44020".equals(svc.getPrimaryCellOperatorInfo().operatorNumeric));
+        TestRunner.check(
+                "sim plmn: registration RAT is LTE",
+                svc.getRegistrationRat() == RadioTechnology.LTE);
     }
 }

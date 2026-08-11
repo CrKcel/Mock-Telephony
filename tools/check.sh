@@ -96,7 +96,7 @@ if grep -Eq 'Class descriptor.*Landroid/(hardware/radio/ims/|telephony/mockmodem
   die "module jar must not contain IMS classes"
 fi
 
-if grep -Eq 'MockSimService\$SimProfileInfo|;\.loadSimProfileFromXml|;\.applyAppConfiguration|;\.(changeSimProfile|applySimIdentity|applySimExtended|applyModemIdentity|setSimInfo)' \
+if grep -Eq 'MockSimService\$SimProfileInfo|MOCK_SIM_PROFILE_ID_DEFAULT|;\.loadSimProfile\b|;\.loadSimCard\b|;\.loadSimProfileFromXml|;\.applyAppConfiguration|;\.(changeSimProfile|applySimIdentity|applySimExtended|applyModemIdentity|setSimInfo)' \
     "$module_dump"; then
   die "module jar must not contain the config-switching runtime"
 fi

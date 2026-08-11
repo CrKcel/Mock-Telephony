@@ -269,18 +269,6 @@ public class MockModemConfigBase implements MockModemConfigInterface {
         }
     }
 
-    private boolean loadSIMCard(int simProfileId) {
-        boolean result = false;
-        if (mSimPhyicalId != -1 && mSimService != null && mSimService[mSimPhyicalId] != null) {
-            result = mSimService[mSimPhyicalId].loadSimCard(simProfileId);
-            if (mSubId == DEFAULT_SUB_ID) {
-                updateSimSlotStatus();
-            }
-            updateCardStatus();
-        }
-        return result;
-    }
-
     private void notifyDeviceIdentityChangedRegistrants() {
         String[] deviceIdentity = new String[4];
         synchronized (mConfigAccess) {
@@ -456,14 +444,6 @@ public class MockModemConfigBase implements MockModemConfigInterface {
             isPresent = (mCardStatus.cardState == CardStatus.STATE_PRESENT) ? true : false;
         }
         return isPresent;
-    }
-
-    @Override
-    public boolean loadSimProfile(int simprofileid, String client) {
-        Log.d(mTAG, "loadSimProfile: profile id(" + simprofileid + ") from: " + client);
-        synchronized (mConfigAccess) {
-            return loadSIMCard(simprofileid);
-        }
     }
 
     @Override

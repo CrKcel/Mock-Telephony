@@ -25,15 +25,18 @@ import android.hardware.radio.network.SignalStrength;
 import android.util.Log;
 
 /**
- * Module fork: no carrier presets. The module is a static no-SIM/no-service
- * subset, so this service carries no preset cells, operator identities or
- * signal values. The constructor default is the fixed no-service state (no
- * home/roaming camping, empty operator/RAT), so HAL queries are correct before
- * any configuration is applied; {@link #applyNetworkConfig} is retained for the
- * JVM apply-path tests and never enables service in the module daemon.
+ * Module fork: no carrier presets. The module registers home on the mock SIM's
+ * PLMN once the SIM is present and ready ({@link #updateSimPlmn}); there are no
+ * preset cells, operator identities or signal values. The constructor default is
+ * the no-service state (no home/roaming camping, empty operator/RAT), so HAL
+ * queries are correct before the SIM PLMN is known; {@link #applyNetworkConfig}
+ * is retained for the JVM apply-path tests and is not used by the module daemon.
  */
 public class MockNetworkService {
     private static final String TAG = "MockNetworkService";
+
+    // Operator name reported while registered on the mock SIM's PLMN.
+    private static final String MOCK_OPERATOR_NAME = "SoftBank";
 
     // Grouping of RAFs
     // 2G
@@ -64,14 +67,9 @@ public class MockNetworkService {
     private int mCsRegState = RegState.NOT_REG_MT_NOT_SEARCHING_OP;
     private int mPsRegState = RegState.NOT_REG_MT_NOT_SEARCHING_OP;
 
-    // Module fork: the constructor default is the fixed no-service bootstrap
-    // state, so no home/roaming camping is set unless an in-service config is
-    // applied (which the module daemon never does).
     private boolean mIsHomeCamping = false;
     private boolean mIsRoamingCamping = false;
 
-    // Applied serving state (from MockAppliedConfig); the module always applies
-    // the no-service default, so these stay empty unless configured.
     private int mRat;
     private String mOperatorName = "";
     private String mOperatorNumeric = "";
@@ -79,9 +77,6 @@ public class MockNetworkService {
     private int mHighRat;
 
     public MockNetworkService() {
-        // Module fork: no carrier presets to load. The constructor defaults to
-        // the fixed no-service state (absent SIM, no camping), matching what the
-        // module daemon publishes.
     }
 
     private int getHighestRatFromNetworkType(int raf) {
@@ -309,9 +304,18 @@ public class MockNetworkService {
     }
 
     public void updateSimPlmn(String simPlmn) {
-        // No carrier presets in the module fork: there is nothing to match the SIM
-        // PLMN against, so the modem stays in its configured no-service state.
-        Log.d(TAG, "updateSimPlmn: " + simPlmn + " (no carrier presets to match)");
+        // Static mock registration
+        if (simPlmn == null || simPlmn.isEmpty()) {
+            Log.d(TAG, "updateSimPlmn: empty PLMN, staying unregistered");
+            return;
+        }
+        mIsHomeCamping = true;
+        mIsRoamingCamping = false;
+        mOperatorNumeric = simPlmn;
+        mOperatorName = MOCK_OPERATOR_NAME;
+        mRat = RadioTechnology.LTE;
+        updateServiceState(RegState.REG_HOME);
+        Log.d(TAG, "updateSimPlmn: camping home on " + simPlmn);
     }
 
     /**

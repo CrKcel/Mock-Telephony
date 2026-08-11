@@ -117,9 +117,6 @@ public interface MockModemConfigInterface {
      */
     boolean isSimCardPresent(String client);
 
-    /** Load a SIM profile synchronously before publishing modem readiness. */
-    boolean loadSimProfile(int simProfileId, String client);
-
     /**
      * Get SIM info of the SIM slot, e.g. MCC/MNC, IMSI.
      *

@@ -47,7 +47,7 @@ Systemless injection of the telephony-stack Feature/VINTF, sets `ro.radio.noril=
 - On devices without a Radio HAL, `com.android.phone` waits for the default HAL before any app gets a chance to run.
 - `MockModemMain` and `IRadio*Impl` register 7 services via `ServiceManager`
   (`config/default`, `modem/slot1`, `sim/slot1`, `network/slot1`, `data/slot1`, `messaging/slot1`, `voice/slot1`).
-- The bootstrap is fixed to a single SIM slot, no SIM, no service (`MOCK_SIM_PROFILE_ID_DEFAULT`).
+- The bootstrap is fixed to a single present mock SIM that registers home on its PLMN once ready; mobile data is not enabled.
 
 ## 4. Module Java Runtime (daemon/)
 

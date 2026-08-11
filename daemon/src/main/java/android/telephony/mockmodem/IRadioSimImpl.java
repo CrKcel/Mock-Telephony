@@ -173,9 +173,10 @@ public class IRadioSimImpl extends IRadioSim.Stub {
     public void areUiccApplicationsEnabled(int serial) {
         Log.d(TAG, "areUiccApplicationsEnabled");
 
+
         boolean enabled = true;
 
-        RadioResponseInfo rsp = mService.makeSolRsp(serial, RadioError.REQUEST_NOT_SUPPORTED);
+        RadioResponseInfo rsp = mService.makeSolRsp(serial);
         try {
             mRadioSimResponse.areUiccApplicationsEnabledResponse(rsp, enabled);
         } catch (RemoteException | NullPointerException ex) {
@@ -284,7 +285,7 @@ public class IRadioSimImpl extends IRadioSim.Stub {
 
         synchronized (mCacheUpdateMutex) {
             // serviceClass is intentionally ignored: the static bootstrap exposes
-            // a fixed absent-SIM app model, so FD/SC queries are answered by AID match.
+            // a fixed mock SIM app model, so FD/SC queries are answered by AID match.
             for (simAppIdx = 0;
                     simAppIdx < numOfSimApp && isFacilitySupport && !isHandled;
                     simAppIdx++) {
@@ -759,7 +760,7 @@ public class IRadioSimImpl extends IRadioSim.Stub {
     public void setSimCardPower(int serial, int powerUp) {
         Log.d(TAG, "setSimCardPower");
 
-        RadioResponseInfo rsp = mService.makeSolRsp(serial, RadioError.REQUEST_NOT_SUPPORTED);
+        RadioResponseInfo rsp = mService.makeSolRsp(serial);
         try {
             mRadioSimResponse.setSimCardPowerResponse(rsp);
         } catch (RemoteException | NullPointerException ex) {

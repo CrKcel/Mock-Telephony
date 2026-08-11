@@ -114,11 +114,11 @@ standard_checks() {
   for _ in $(seq 1 30); do
     phone_state=$(shell service check phone 2>&1 | tr -d '\r')
     sim_state=$(shell getprop gsm.sim.state | tr -d '\r')
-    [ "$phone_state" = 'Service phone: found' ] && [ "$sim_state" = ABSENT ] && break
+    [ "$phone_state" = 'Service phone: found' ] && [ "$sim_state" = READY ] && break
     sleep 1
   done
   [ "$phone_state" = 'Service phone: found' ] || die "phone service is unavailable"
-  [ "$sim_state" = ABSENT ] || die "SIM state is $sim_state (static bootstrap profile is no-SIM)"
+  [ "$sim_state" = READY ] || die "SIM state is $sim_state (static bootstrap mock SIM is not READY)"
 
   hal_count=$(shell service list | grep -Ec \
     'android\.hardware\.radio\.(config|data|messaging|modem|network|sim|voice)\.IRadio')
@@ -149,8 +149,8 @@ standard_checks() {
   [ "$(shell getprop gsm.version.baseband | tr -d '\r')" = MPSS.DI.3.0.c1.7-00001-1 ] \
     || die "unexpected baseband"
   registry=$(shell dumpsys telephony.registry)
-  grep -q 'mVoiceRegState=1(OUT_OF_SERVICE)' <<<"$registry" || die "voice is not OUT_OF_SERVICE"
-  grep -q 'mDataRegState=1(OUT_OF_SERVICE)' <<<"$registry" || die "data registration is not OUT_OF_SERVICE"
+  grep -q 'mVoiceRegState=0(IN_SERVICE)' <<<"$registry" || die "voice is not IN_SERVICE"
+  grep -q 'mDataRegState=0(IN_SERVICE)' <<<"$registry" || die "data registration is not IN_SERVICE"
   grep -q 'mDataConnectionState=-1' <<<"$registry" || die "data connection was unexpectedly created"
 
   # The injected files must be visible in the system tree via whichever backend
@@ -185,7 +185,7 @@ standard_checks() {
       ;;
   esac
 
-  echo "ADB smoke passed: phone found, SIM ABSENT, 7 HALs, state-only data (framework=$FRAMEWORK)"
+  echo "ADB smoke passed: phone found, SIM READY, 7 HALs, voice/data IN_SERVICE (framework=$FRAMEWORK)"
 }
 
 # Deliberately break a bootstrap precondition, reboot, assert the failure

@@ -325,7 +325,7 @@ public class IRadioModemImpl extends IRadioModem.Stub {
         Log.d(TAG, "sendDeviceState");
 
         // Device-state hints (power-save, low-data, charging) cannot change the
-        // fixed no-service bootstrap state, so they are accepted and discarded.
+        // fixed mock bootstrap state, so they are accepted and discarded.
         RadioResponseInfo rsp = mService.makeSolRsp(serial);
         try {
             mRadioModemResponse.sendDeviceStateResponse(rsp);
