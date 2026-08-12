@@ -111,14 +111,23 @@ reboot_and_wait() {
 }
 
 standard_checks() {
+  # Android 15+ advances the terminal SIM state from READY to LOADED once every
+  # IccRecords EF has loaded (the static mock SIM now completes its ICCID read),
+  # so both are valid terminal states for the bootstrap.
   for _ in $(seq 1 30); do
     phone_state=$(shell service check phone 2>&1 | tr -d '\r')
     sim_state=$(shell getprop gsm.sim.state | tr -d '\r')
-    [ "$phone_state" = 'Service phone: found' ] && [ "$sim_state" = READY ] && break
+    if [ "$phone_state" = 'Service phone: found' ] \
+      && { [ "$sim_state" = READY ] || [ "$sim_state" = LOADED ]; }; then
+      break
+    fi
     sleep 1
   done
   [ "$phone_state" = 'Service phone: found' ] || die "phone service is unavailable"
-  [ "$sim_state" = READY ] || die "SIM state is $sim_state (static bootstrap mock SIM is not READY)"
+  case "$sim_state" in
+    READY|LOADED) ;;
+    *) die "SIM state is $sim_state (static bootstrap mock SIM is not READY/LOADED)" ;;
+  esac
 
   hal_count=$(shell service list | grep -Ec \
     'android\.hardware\.radio\.(config|data|messaging|modem|network|sim|voice)\.IRadio')
@@ -185,7 +194,7 @@ standard_checks() {
       ;;
   esac
 
-  echo "ADB smoke passed: phone found, SIM READY, 7 HALs, voice/data IN_SERVICE (framework=$FRAMEWORK)"
+  echo "ADB smoke passed: phone found, SIM $sim_state, 7 HALs, voice/data IN_SERVICE (framework=$FRAMEWORK)"
 }
 
 # Deliberately break a bootstrap precondition, reboot, assert the failure

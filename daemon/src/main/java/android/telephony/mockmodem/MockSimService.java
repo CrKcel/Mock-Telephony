@@ -67,7 +67,11 @@ public class MockSimService {
     private static final String MOCK_MCC = "440";
     private static final String MOCK_MNC = "20";
     private static final String MOCK_MSIN = "3819472074";
-    private static final String MOCK_ICCID_INFO = "000a3ff0a2fe2044050ffff01020002";
+    // GET_RESPONSE metadata for EF_ICCID, in the same 0000<size><fileId>040000ffff01020002
+    // layout that buildEfFileInfo emits for the other transparent EFs. The 2-byte file size
+    // sits at bytes 2-3 (0x000a = 10 bytes, the BCD-encoded 20-digit ICCID). Must stay even
+    // length: the framework IccIoResult constructor hexStringToBytes() throws on odd hex.
+    private static final String MOCK_ICCID_INFO = "0000000a2fe2040000ffff01020002";
     private static final String MOCK_SPN = "SoftBank";
     private static final String MOCK_GID1 = "00";
     private static final String MOCK_GID2 = "00";

@@ -446,7 +446,14 @@ public class IRadioSimImpl extends IRadioSim.Stub {
         SimAppData app = mSimAppList.get(simAppIdx);
         switch (fileId) {
             case EF_SPN:
-                return encodeHexString(app.getSpn());
+                // The framework decodes EF_SPN as [1-byte length][SPN bytes]; without the
+                // leading length byte the first character is eaten as the length value.
+                String spn = app.getSpn();
+                return String.format(
+                                Locale.ROOT,
+                                "%02x",
+                                spn.getBytes(java.nio.charset.StandardCharsets.UTF_8).length)
+                        + encodeHexString(spn);
             case EF_GID1:
                 return app.getGid1();
             case EF_GID2:
