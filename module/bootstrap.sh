@@ -32,9 +32,6 @@ restore_original_properties() {
     esac
     "$RESETPROP" -n ro.radio.noril "$original" || true
   fi
-  if [ -x "$RESETPROP" ]; then
-    "$RESETPROP" -n persist.radio.allow_mock_modem false || true
-  fi
 }
 
 bootstrap_prepare() {
@@ -211,8 +208,6 @@ bootstrap_apply() {
   fi
   "$RESETPROP" -n ro.radio.noril false \
     || { module_log "$BOOTSTRAP_STAGE" "failed to set ro.radio.noril"; bootstrap_failed; return 1; }
-  "$RESETPROP" -n persist.radio.allow_mock_modem true \
-    || { module_log "$BOOTSTRAP_STAGE" "failed to enable mock modem property"; bootstrap_failed; return 1; }
   module_log "$BOOTSTRAP_STAGE" "done"
   return 0
 }

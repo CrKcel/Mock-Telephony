@@ -20,7 +20,6 @@ case_overlay_success() {
   assert_exists "$SANDBOX/system/etc/vintf/manifest/mockmodem.radio.xml" || return 1
   # Properties set only after both overlays are usable; originals captured first.
   assert_file_contains "$SANDBOX/trace/resetprop" "ro.radio.noril false" || return 1
-  assert_file_contains "$SANDBOX/trace/resetprop" "persist.radio.allow_mock_modem true" || return 1
   assert_file_contains "$rt/radio.noril.original" "true" || return 1
   # No failure marker.
   assert_not_exists "$rt/.bootstrap_failed" || return 1
@@ -37,7 +36,6 @@ case_overlay_failure_rolls_back() {
   assert_exists "$rt/.bootstrap_failed" || return 1
   # Failure path restores the captured originals (device had no explicit value).
   assert_file_contains "$SANDBOX/trace/resetprop" "ro.radio.noril true" || return 1
-  assert_file_contains "$SANDBOX/trace/resetprop" "persist.radio.allow_mock_modem false" || return 1
   assert_log_contains "bootstrap prerequisites failed" || return 1
   return 0
 }
@@ -79,9 +77,6 @@ case_resetprop_fail_blocks() {
   rt="$(RT)"
   assert_exists "$rt/.bootstrap_failed" || return 1
   assert_log_contains "failed to set ro.radio.noril" || return 1
-  # Rollback reset allow_mock_modem to the default.
-  assert_file_contains "$SANDBOX/trace/resetprop" \
-    "persist.radio.allow_mock_modem false" || return 1
   return 0
 }
 
@@ -97,7 +92,6 @@ case_bind_fallback() {
   assert_exists "$rt/bind-system-etc-permissions/mock-telephony-features.xml" || return 1
   assert_exists "$rt/bind-system-etc-vintf-manifest/mockmodem.radio.xml" || return 1
   assert_file_contains "$SANDBOX/trace/resetprop" "ro.radio.noril false" || return 1
-  assert_file_contains "$SANDBOX/trace/resetprop" "persist.radio.allow_mock_modem true" || return 1
   assert_not_exists "$rt/.bootstrap_failed" || return 1
   return 0
 }
@@ -113,7 +107,6 @@ case_bind_failure_rolls_back() {
   rt="$(RT)"
   assert_exists "$rt/.bootstrap_failed" || return 1
   assert_file_contains "$SANDBOX/trace/resetprop" "ro.radio.noril true" || return 1
-  assert_file_contains "$SANDBOX/trace/resetprop" "persist.radio.allow_mock_modem false" || return 1
   return 0
 }
 
@@ -142,7 +135,6 @@ case_apatch_defers_until_post_mount() {
   harness_sh -c 'APATCH=true /data/adb/modules/mock_telephony/post-mount.sh' || return 1
   assert_not_exists "$SANDBOX/trace/mount" || return 1
   assert_file_contains "$SANDBOX/trace/resetprop" "ro.radio.noril false" || return 1
-  assert_file_contains "$SANDBOX/trace/resetprop" "persist.radio.allow_mock_modem true" || return 1
   return 0
 }
 

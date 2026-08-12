@@ -172,8 +172,6 @@ standard_checks() {
   # Bootstrap properties took effect, so the resolved resetprop binary worked.
   [ "$(shell getprop ro.radio.noril | tr -d '\r')" = false ] \
     || die "ro.radio.noril is not false after bootstrap"
-  [ "$(shell getprop persist.radio.allow_mock_modem | tr -d '\r')" = true ] \
-    || die "persist.radio.allow_mock_modem is not true after bootstrap"
 
   # The on-device sepolicy.rule must match the detected framework: KernelSU
   # keeps the ksu domain; Magisk/APatch must never load it (unknown type).
@@ -246,8 +244,6 @@ uninstall_reinstall() {
   fi
   hal_count=$(shell service list 2>/dev/null | grep -Ec 'android\.hardware\.radio\.' || true)
   [ "$hal_count" -eq 0 ] || die "radio HALs still registered after uninstall: $hal_count"
-  allow_mock=$(shell getprop persist.radio.allow_mock_modem | tr -d '\r')
-  [ "$allow_mock" != true ] || die "persist.radio.allow_mock_modem was not restored"
   echo "[uninstall-reinstall] clean state verified"
 
   echo "[uninstall-reinstall] reinstalling package and rebooting"

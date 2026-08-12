@@ -28,10 +28,6 @@ rg -q 'bootstrap_apply' "$post_mount" \
   || fail "post-mount does not invoke the APatch bootstrap transaction"
 rg -q 'bootstrap_failed' "$service_script" \
   || fail "service.sh does not block startup after bootstrap failure"
-rg -q 'persist\.radio\.allow_mock_modem true' "$bootstrap" \
-  || fail "post-fs-data must enable the mock modem property for Shizuku/ADB"
-rg -q 'set-modem-service' "$uninstall_script" \
-  || fail "uninstall.sh must restore the default modem service"
 
 # Install preflight must cancel on a device that already has telephony enabled.
 rg -q 'ro\.radio\.noril' "$PROJECT_ROOT/module/customize.sh" \

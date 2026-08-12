@@ -14,30 +14,6 @@ echo "[uninstall] removing overlays $(date)" >> "$LOG"
 : > "$RUNTIME/.uninstalling"
 chmod 600 "$RUNTIME/.uninstalling"
 
-resolve_su() {
-  if [ "${APATCH:-}" = true ] && [ -r /data/adb/ap/su_path ]; then
-    candidate=$(cat /data/adb/ap/su_path 2>/dev/null)
-    if [ -x "$candidate" ]; then
-      printf '%s\n' "$candidate"
-      return 0
-    fi
-  fi
-  for candidate in /system/bin/su /system/bin/kp /data/adb/ap/bin/su /data/adb/magisk/su; do
-    if [ -x "$candidate" ]; then
-      printf '%s\n' "$candidate"
-      return 0
-    fi
-  done
-  command -v su 2>/dev/null || true
-}
-
-SU_BIN=$(resolve_su)
-if [ -n "$SU_BIN" ]; then
-  "$SU_BIN" 2000 -c \
-    "/system/bin/cmd phone radio set-modem-service >/dev/null 2>&1" || true
-fi
-echo "[uninstall] reset modem service to default" >> "$LOG"
-
 SPID=$(cat "$RUNTIME/supervisor.pid" 2>/dev/null)
 if process_matches "$SPID" "$MODDIR/mockmodem-supervisor.sh"; then
   kill "$SPID" 2>>"$LOG" || true
@@ -80,10 +56,6 @@ if [ -x "$RESETPROP" ]; then
       true|false) "$RESETPROP" -n ro.radio.noril "$original" || true ;;
     esac
   fi
-  # persist.radio.allow_mock_modem survives reboots, so a saved "original" would
-  # just be this module's own value; reset it to the default deterministically.
-  "$RESETPROP" -n persist.radio.allow_mock_modem false || true
-  echo "[uninstall] reset allow_mock_modem=false" >> "$LOG"
 fi
 
 echo "[uninstall] done" >> "$LOG"

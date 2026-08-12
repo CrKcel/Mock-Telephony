@@ -116,7 +116,6 @@ case_apatch_native_overlay_lifecycle() {
   assert_file_contains "$SANDBOX/trace/resetprop-framework" apatch || return 1
   assert_file_not_contains "$SANDBOX/trace/resetprop-framework" ksu || return 1
   assert_file_not_contains "$SANDBOX/trace/resetprop-framework" magisk || return 1
-  assert_file_contains "$SANDBOX/trace/resetprop" "persist.radio.allow_mock_modem true" || return 1
 }
 
 case_apatch_bind_fallback() {
@@ -150,7 +149,6 @@ case_apatch_failure_uses_apatch_rollback() {
   assert_exists "$(RT)/.bootstrap_failed" || return 1
   assert_file_contains "$SANDBOX/trace/resetprop-framework" apatch || return 1
   assert_file_contains "$SANDBOX/trace/resetprop" "ro.radio.noril true" || return 1
-  assert_file_contains "$SANDBOX/trace/resetprop" "persist.radio.allow_mock_modem false" || return 1
 }
 
 case_magisk_uninstall_uses_magisk_resetprop() {
