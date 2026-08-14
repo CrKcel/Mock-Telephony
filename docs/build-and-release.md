@@ -7,7 +7,9 @@ Requires JDK 11+, Android SDK platform & build-tools 34+, 7-Zip, `xmllint`, `unz
 ## Build
 
 ```bash
-./tools/release.sh
+./tools/build.sh              # build daemon jar + package module ZIP
+./tools/build.sh --no-package # daemon jar only
+./tools/build.sh --no-build   # repackage from an existing daemon jar
 ```
 
 Artifacts:

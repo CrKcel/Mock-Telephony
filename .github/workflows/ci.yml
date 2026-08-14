@@ -37,4 +37,11 @@ jobs:
             unzip
 
       - name: Build, test, and package
-        run: ./tools/release.sh
+        run: ./tools/build.sh
+
+      - name: Upload module ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: mock-telephony-module
+          path: dist/mock-telephony-*.zip
+          if-no-files-found: error
