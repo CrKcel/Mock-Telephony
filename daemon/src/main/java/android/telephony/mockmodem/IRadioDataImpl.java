@@ -147,7 +147,7 @@ public class IRadioDataImpl extends IRadioData.Stub {
     @Override
     public void setDataProfile(int serial, DataProfileInfo[] profiles) {
         Log.d(TAG, "setDataProfile");
-        RadioResponseInfo rsp = mService.makeSolRsp(serial, RadioError.REQUEST_NOT_SUPPORTED);
+        RadioResponseInfo rsp = mService.makeSolRsp(serial);
         try {
             mRadioDataResponse.setDataProfileResponse(rsp);
         } catch (RemoteException | NullPointerException ex) {
@@ -170,7 +170,7 @@ public class IRadioDataImpl extends IRadioData.Stub {
     @Override
     public void setInitialAttachApn(int serial, DataProfileInfo dataProfileInfo) {
         Log.d(TAG, "setInitialAttachApn");
-        RadioResponseInfo rsp = mService.makeSolRsp(serial, RadioError.REQUEST_NOT_SUPPORTED);
+        RadioResponseInfo rsp = mService.makeSolRsp(serial);
         try {
             mRadioDataResponse.setInitialAttachApnResponse(rsp);
         } catch (RemoteException | NullPointerException ex) {

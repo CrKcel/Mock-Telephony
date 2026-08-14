@@ -238,12 +238,34 @@ public class MockNetworkService {
                 new SignalStrength();
 
         signalStrength.gsm = new android.hardware.radio.network.GsmSignalStrength();
+        signalStrength.gsm.signalStrength = 20;
         signalStrength.cdma = new android.hardware.radio.network.CdmaSignalStrength();
+        signalStrength.cdma.dbm = -85;
+        signalStrength.cdma.ecio = -10;
         signalStrength.evdo = new android.hardware.radio.network.EvdoSignalStrength();
+        signalStrength.evdo.dbm = -85;
+        signalStrength.evdo.ecio = -10;
+        signalStrength.evdo.signalNoiseRatio = 100;
         signalStrength.lte = new android.hardware.radio.network.LteSignalStrength();
+        signalStrength.lte.signalStrength = 25;
+        signalStrength.lte.rsrp = -95;
+        signalStrength.lte.rsrq = -8;
+        signalStrength.lte.rssnr = 100;
+        signalStrength.lte.cqi = 15;
         signalStrength.tdscdma = new android.hardware.radio.network.TdscdmaSignalStrength();
+        signalStrength.tdscdma.signalStrength = 20;
+        signalStrength.tdscdma.rscp = -85;
         signalStrength.wcdma = new android.hardware.radio.network.WcdmaSignalStrength();
+        signalStrength.wcdma.signalStrength = 20;
+        signalStrength.wcdma.rscp = -85;
+        signalStrength.wcdma.ecno = -8;
         signalStrength.nr = new android.hardware.radio.network.NrSignalStrength();
+        signalStrength.nr.ssRsrp = -95;
+        signalStrength.nr.ssRsrq = -8;
+        signalStrength.nr.ssSinr = 20;
+        signalStrength.nr.csiRsrp = -95;
+        signalStrength.nr.csiRsrq = -8;
+        signalStrength.nr.csiSinr = 20;
         signalStrength.nr.csiCqiReport = new byte[0];
 
         return signalStrength;

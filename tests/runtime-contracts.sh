@@ -67,9 +67,10 @@ done
 
 # ---- table-driven sweep over the solicited AIDL request surface ----------
 # Every framework -> HAL request must be answered, and must either return a
-# successful state snapshot (the documented queries below) or fail
-# deterministically. This list is the auditable SUCCESS surface; every other
-# request method must not return a bare success response.
+# successful state snapshot or an accepted config push (the documented
+# responses below) or fail deterministically. This list is the auditable
+# SUCCESS surface; every other request method must not return a bare success
+# response.
 SUCCESS_QUERIES="
 getNumOfLiveModems getPhoneCapability getSimSlotsStatus
 getBasebandVersion getDeviceIdentity requestShutdown sendDeviceState setRadioPower
@@ -78,6 +79,7 @@ getAllowedNetworkTypesBitmap getAvailableBandModes getAvailableNetworks
 getCellInfoList getDataRegistrationState getNetworkSelectionMode getOperator
 getSignalStrength getSystemSelectionChannels getVoiceRadioTechnology
 getVoiceRegistrationState setAllowedNetworkTypesBitmap
+setDataProfile setInitialAttachApn
 getCurrentCalls
 "
 
